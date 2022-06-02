@@ -1,0 +1,63 @@
+.code-editor-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.code-editor {
+  width: 90%;
+  align-self: center;
+  flex: 3;
+  display: flex;
+  flex-direction: row;
+}
+
+.code-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+}
+
+.code-buttons > * {
+  flex: 1;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.code-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-button-container > * {
+  width: 50%;
+}
+
+.code-section {
+  flex: 4;
+  display: flex;
+}
+
+.files-section {
+  flex: 1;
+}
+
+.editable-code, .editableArea--single-line {
+  background-color: #e9f7d5 !important;
+}
+.add-btn {
+  background-color: white !important;
+}
+
+.loading-spinner {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000;
+  width: 100%;
+}

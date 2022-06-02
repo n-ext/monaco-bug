@@ -1,24 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import CodeEditorWrapper from "./components/code-editor-for-file/CodeEditorWrapper";
+import files from "./components/code-editor/files";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header">HEADER</div>
+      <div className="content">
+        {/* <CodeEditor /> */}
+        <CodeEditorWrapper files={files} filesLoading={false} modelName="test" />
+      </div>
+      <div className="bottom">bottom</div>
     </div>
   );
 }
