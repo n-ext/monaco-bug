@@ -204,8 +204,37 @@ const someHTMLCodeExample = `
 `;
 
 const files: { [name: string]: CodeFile } = {
+  "index.html": {
+    name: "index.html",
+    language: "html",
+    source: someHTMLCodeExample,
+    constrains: [
+      {
+        range: [2, 2, 2, 10],
+        allowMultiline: false,
+        label: "we",
+      },
+    ],
+  },
   "script.js": {
     name: "script.js",
+    language: "javascript",
+    source: someJSCodeExample,
+    constrains: [
+      {
+        range: [5, 12, 5, 23],
+        allowMultiline: false,
+        label: "type-str",
+      },
+      {
+        range: [6, 11, 6, 41],
+        allowMultiline: false,
+        label: "msg-str",
+      },
+    ],
+  },
+  "script2.js": {
+    name: "script2.js",
     language: "javascript",
     source: someJSCodeExample,
     constrains: [
@@ -225,11 +254,13 @@ const files: { [name: string]: CodeFile } = {
     name: "style.css",
     language: "css",
     source: someCSSCodeExample,
-  },
-  "index.html": {
-    name: "index.html",
-    language: "html",
-    source: someHTMLCodeExample,
+    constrains: [
+      {
+        range: [2, 2, 2, 10],
+        allowMultiline: false,
+        label: "we",
+      },
+    ],
   },
 };
 
