@@ -15,49 +15,14 @@ type Props = {
 
 const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesLoading, modelName }: Props) => {
   const [file, setFile] = useState<CodeFile>(Object.values(files)[0]);
-  const [reseting, setReseting] = useState(false);
-
-  const [saveCodeForRender, setSaveCodeForRender] = useState({
-    status: "",
-    message: "",
-  });
 
   const refs = useRef<{ editor?: any; constrainedInstance?: any }>({
     editor: undefined,
     constrainedInstance: undefined,
   });
-  const deltaDecorationsRef = useRef<string[]>([]);
-
-  const getFile = () => {
-    const code: string = refs.current.editor.getValue();
-
-    const codeFile: CodeFile = {
-      name: file.name,
-      language: file.language,
-      source: code,
-    };
-
-    if (constrained && file.constrains) {
-      const model = refs.current.editor.getModel();
-      const ranges = Object.values(model.getCurrentEditableRanges());
-      const constrains: Restriction[] = ranges.map((rangeObj: any, idx) => ({
-        range: [
-          rangeObj.range.startLineNumber,
-          rangeObj.range.startColumn,
-          rangeObj.range.endLineNumber,
-          rangeObj.range.endColumn,
-        ],
-        label: file.constrains ? file.constrains[idx].label : rangeObj.index,
-        allowMultiline: file.constrains ? file.constrains[idx].allowMultiline : false,
-      }));
-      codeFile.constrains = constrains;
-    }
-    return codeFile;
-  };
 
   useEffect(() => {
     setFile(Object.values(files)[0]);
-    // deltaDecorationsRef.current = [];
   }, [files]);
 
   useEffect(() => {
@@ -80,13 +45,6 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
     if (highlight) updateHighlight(file);
   }, [file]);
 
-  useEffect(() => {
-    if (saveCodeForRender.status === "SUCCESS") {
-    } else if (saveCodeForRender.status === "ERROR") {
-    }
-    // console.log(saveCodeForRender);
-  }, [saveCodeForRender]);
-
   const addRef = (editor: any, constrainedInstance: any) => {
     refs.current = {
       editor,
@@ -101,9 +59,6 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
   const onFileChange = (newFile: CodeFile) => {
     if (file === newFile) return;
     setFile(newFile);
-    setTimeout(() => {
-      if (highlight) updateHighlight(newFile);
-    }, 10);
   };
 
   const updateHighlight = (file: CodeFile) => {
@@ -116,18 +71,10 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
       try {
         refs.current.constrainedInstance.addRestrictionsTo(
           model,
-          file?.constrains?.map((restricitons) => ({
-            ...restricitons,
-            // validate: (currentlyTypedValue: string, newRange: any, info: any) => {
-            //   if (info.isDeletion) {s
-            //   }
-            //   return true;
-            // },
-          }))
+          file.constrains?.map((restricitons) => restricitons) || []
         );
       } catch (exception) {
-        // console.log(exception);
-
+        console.log(exception);
         refs.current.constrainedInstance.addRestrictionsTo(model, []);
       }
     }
@@ -136,14 +83,10 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
       model.toggleHighlightOfEditableAreas();
     }
     return;
-    const ranges = Object.values(model.getCurrentEditableRanges());
-    deltaDecorationsRef.current = refs.current.editor.deltaDecorations(
-      deltaDecorationsRef.current,
-      ranges.map((rangeObj: any) => ({
-        range: rangeObj.range,
-        options: { className: "editable-code" },
-      }))
-    );
+  };
+
+  const handleReset = () => {
+    setFile({ ...file });
   };
 
   return (
@@ -161,7 +104,7 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
           </div>
         )}
         <div className="code-section">
-          {(filesLoading || reseting) && (
+          {filesLoading && (
             <div className="loading-spinner">
               <CircularProgress />
             </div>
@@ -171,7 +114,7 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
       </div>
       <div className="code-buttons">
         <div className="code-button-container">
-          <Button variant="contained" color="error">
+          <Button variant="contained" color="error" onClick={() => handleReset()}>
             {"RESET_BUTTON"}
           </Button>
         </div>
