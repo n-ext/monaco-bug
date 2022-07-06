@@ -31,10 +31,9 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
     }
     if (constrained) {
       refs.current.constrainedInstance.initializeIn(refs.current.editor);
-      refs.current.constrainedInstance.toggleDevMode();
       const model = refs.current.editor.getModel();
       if (file?.constrains) {
-        refs.current.constrainedInstance.addRestrictionsTo(model, file?.constrains);
+        refs.current.constrainedInstance.addRestrictionsTo(model, file.constrains);
       }
     } else {
       refs.current.constrainedInstance.disposeConstrainer();
@@ -66,12 +65,16 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
     if (!refs.current.editor || !refs.current.constrainedInstance) {
       return;
     }
+
+    // refs.current.constrainedInstance.disposeConstrainer();
+    // refs.current.constrainedInstance.initializeIn(refs.current.editor);
+
     const model = refs.current.editor.getModel();
     if (!model._isRestrictedModel) {
       try {
         refs.current.constrainedInstance.addRestrictionsTo(
           model,
-          file.constrains?.map((restricitons) => restricitons) || []
+          file.constrains?.map((restrictions) => restrictions) || []
         );
       } catch (exception) {
         console.log(exception);
@@ -86,7 +89,9 @@ const CodeEditorWrapper = ({ highlight = true, constrained = true, files, filesL
   };
 
   const handleReset = () => {
-    setFile({ ...file });
+    // setFile({ ...file });
+    refs.current.editor.setValue(file.source);
+    updateHighlight(file);
   };
 
   return (
